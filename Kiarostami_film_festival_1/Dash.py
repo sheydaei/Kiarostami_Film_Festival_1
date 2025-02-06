@@ -55,7 +55,107 @@ dash_app.layout = html.Div([
 
     html.Div([
         html.H2("Age Distribution", style={'textAlign': 'center', 'color': 'rgb(167, 183, 203)'}),  
-        dcc.Graph(id='age-histogram', figure=px.histogram(df, x="Age", title="Age Distribution", template="plotly_dark"))
+        dcc.Graph(id='age-histogram')
+    ]),
+    
+    # Section for Total Countries and Country Table
+    html.Div([
+        # Card for Total Countries
+        html.Div([
+            html.H3("Total Countries", style={'textAlign': 'center', 'color': 'rgb(168, 182, 203)'}), 
+            html.H1(f"{df2['Country of Residence'].nunique()}", style={'textAlign': 'center', 'color': 'rgb(255, 255, 255)'})  # سفید
+        ], style={
+            'backgroundColor': 'rgb(0, 0, 0)',  
+            'padding': '20px',
+            'borderRadius': '10px',
+            'width': '30%',
+            'margin': '10px auto',
+            'display': 'flex',
+            'flexDirection': 'column',
+            'justifyContent': 'center',
+            'alignItems': 'center'
+        }),
+        
+        # Table for Countries
+        html.Div([
+            html.H2("Countries Represented (Table)", style={'textAlign': 'center', 'color': 'rgb(167, 183, 203)'}),  # آبی خاکستری
+            html.Div(id='country-table')
+        ])
+    ]),
+    
+    # Section for Films Inspired by Kiarostami
+    html.Div([
+        html.H2("Films Inspired by Kiarostami", style={'textAlign': 'center', 'color': 'rgb(167, 183, 203)'}),  # آبی خاکستری
+        dcc.Graph(id="bar-chart"),
+        html.Div([
+            dcc.RangeSlider(
+                id='year-slider',
+                min=int(df3["Production Year"].min()),
+                max=int(df3["Production Year"].max()),
+                value=[int(df3["Production Year"].min()), int(df3["Production Year"].max())],
+                marks={int(year): str(year) for year in sorted(df3["Production Year"].unique())},
+                step=1
+            ),
+            html.P("Adjust the slider to filter by Year of Production", style={'textAlign': 'center', 'color': 'rgb(167, 183, 203)'})  # آبی خاکستری
+        ])
+    ]),
+    
+    # Section for Movies by Genre and Rejection Status
+    html.Div([
+        html.H2("Movies by Genre and Rejection Status", style={'textAlign': 'center', 'color': 'rgb(167, 183, 203)'}),  # آبی خاکستری
+        dcc.Graph(id="genre-bar-chart"),
+        html.Div([
+            dcc.Dropdown(
+                id="rejection-dropdown",
+                options=[
+                    {"label": "All Movies", "value": "all"},
+                    {"label": "Rejected Movies", "value": True},
+                    {"label": "Non-Rejected Movies", "value": False}
+                ],
+                value="all",
+                placeholder="Select rejection status",
+                clearable=False,
+                style={'backgroundColor': 'rgb(1, 1, 1)', 'color': 'rgb(255, 255, 255)'}  
+            )
+        ], style={'width': '50%', 'margin': '0 auto'})
+    ]),
+    
+    # Section for Rejected vs. Inspired by Kiarostami
+    html.Div([
+        html.H2("Relationship Between Rejection and Inspiration by Kiarostami", style={'textAlign': 'center', 'color': 'rgb(167, 183, 203)'}), 
+        dcc.Graph(id="rejected-inspired-graph")
+    ]),
+    
+    # Section for Film Duration Histogram
+    html.Div([
+        html.H2("Film Duration Histogram", style={'textAlign': 'center', 'color': 'rgb(167, 183, 203)'}),  
+        dcc.Graph(id="duration-histogram"),
+        html.Div([
+            html.Div([
+                dcc.Dropdown(
+                    id="genre-filter",
+                    options=[{"label": genre, "value": genre} for genre in df3['Film Category'].unique()],
+                    value=None,
+                    placeholder="Select a Genre",
+                    clearable=True,
+                    style={'backgroundColor': 'rgb(1, 1, 1)', 'color': 'rgb(255, 255, 255)'}  
+                )
+            ], style={'width': '48%', 'display': 'inline-block'}),
+            html.Div([
+                dcc.Dropdown(
+                    id="rejected-filter",
+                    options=[
+                        {"label": "All Movies", "value": "all"},
+                        {"label": "Accepted Movies", "value": False},
+                        {"label": "Rejected Movies", "value": True}
+                    ],
+                    value="all",
+                    placeholder="Select Rejection Status",
+                    clearable=False,
+                    style={'backgroundColor': 'rgb(1, 1, 1)', 'color': 'rgb(255, 255, 255)'}  
+                )
+            ], style={'width': '48%', 'display': 'inline-block'})
+        ], style={'margin': '10px auto'})
     ])
 ], style={'backgroundColor': 'rgb(0, 0, 0)', 'color': 'rgb(255, 255, 255)'})
 
