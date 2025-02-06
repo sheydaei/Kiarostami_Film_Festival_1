@@ -1,3 +1,5 @@
-dash
-plotly
+streamlit
 pandas
+plotly
+gdown
+dash
