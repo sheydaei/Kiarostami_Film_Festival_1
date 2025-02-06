@@ -63,7 +63,7 @@ dash_app.layout = html.Div([
         # Card for Total Countries
         html.Div([
             html.H3("Total Countries", style={'textAlign': 'center', 'color': 'rgb(168, 182, 203)'}), 
-            html.H1(f"{df2['Country of Residence'].nunique()}", style={'textAlign': 'center', 'color': 'rgb(255, 255, 255)'})  # سفید
+            html.H1(f"{df['Country of Residence'].nunique()}", style={'textAlign': 'center', 'color': 'rgb(255, 255, 255)'})  # سفید
         ], style={
             'backgroundColor': 'rgb(0, 0, 0)',  
             'padding': '20px',
