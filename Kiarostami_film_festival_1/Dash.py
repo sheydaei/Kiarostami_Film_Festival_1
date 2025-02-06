@@ -3,16 +3,13 @@ from dash import dcc, html
 import pandas as pd
 import plotly.express as px
 import streamlit as st
-import gdown
 
 st.set_page_config(page_title="Kiarostami Film Festival Dashboard", layout="wide")
 
 st.title("🎬 Kiarostami Short Film Festival Dashboard")
 
-FILE_ID = "1HDY03kLu4vdjbwnLc261gxKWl__ef_nV"
-url = f"https://drive.google.com/uc?export=download&id={FILE_ID}"
-csv_path = "Final_Final2.csv"
-gdown.download(url, csv_path, quiet=False)
+csv_url = "https://raw.githubusercontent.com/sheydaei/My-projects/refs/heads/main/Kiarostami_film_festival_1/Final_Final2.csv"
+df = pd.read_csv(csv_url)
 
 df = pd.read_csv(csv_path)
 df = df.drop(['Unnamed: 0'], axis=1)
