@@ -4,13 +4,16 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
+# 📌 تنظیمات صفحه در Streamlit
 st.set_page_config(page_title="Kiarostami Film Festival Dashboard", layout="wide")
 
 st.title("🎬 Kiarostami Short Film Festival Dashboard")
 
-csv_url = "https://raw.githubusercontent.com/sheydaei/My-projects/refs/heads/main/Kiarostami_film_festival_1/Final_Final2.csv"
+# 📌 خواندن فایل CSV از GitHub (لینک `raw.githubusercontent.com` رو چک کن)
+csv_url = "https://raw.githubusercontent.com/sheydaei/My-projects/main/Kiarostami_film_festival_1/Final_Final2.csv"
 df = pd.read_csv(csv_url)
 
+# 📌 پردازش داده‌ها
 df['Age'] = pd.to_numeric(df['Age'], errors='coerce')
 df['Gender'] = df['Gender'].replace({
     'male': 'Male',           
@@ -23,6 +26,7 @@ df3['Inspired_By_Kiarostami_clean'] = df3['Inspired_By_Kiarostami_clean'].replac
     'Other ways': 'Loosely Inspired'
 })
 
+# 📌 ساخت داشبورد Dash
 app = dash.Dash(__name__)
 app.layout = html.Div([
     html.H1("Kiarostami Short Film Festival", style={'textAlign': 'center', 'color': 'white'}),  
@@ -48,6 +52,11 @@ app.layout = html.Div([
     ])
 ], style={'backgroundColor': 'black', 'color': 'white'})
 
-dash_app_html = app.index()
+# 📌 اجرای Dash در Streamlit
+from flask import Flask
+flask_app = Flask(__name__)
+dash_app = dash.Dash(__name__, server=flask_app, requests_pathname_prefix="/dash/")
+dash_app.layout = app.layout
 
-st.components.v1.html(dash_app_html, height=1000)
+st.write("🔹 **Loading Dashboard...**")
+st.components.v1.iframe("https://your-streamlit-app-url/dash/", height=800)
