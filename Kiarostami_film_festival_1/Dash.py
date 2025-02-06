@@ -1,12 +1,9 @@
 import dash
 from dash import dcc, html
-from dash.dependencies import Input, Output
 import pandas as pd
 import plotly.express as px
 import streamlit as st
 import gdown
-from flask import Flask
-from dash.dash import _generate_limited_dispatch_by_url
 
 st.set_page_config(page_title="Kiarostami Film Festival Dashboard", layout="wide")
 
@@ -32,11 +29,8 @@ df3['Inspired_By_Kiarostami_clean'] = df3['Inspired_By_Kiarostami_clean'].replac
     'Other ways': 'Loosely Inspired'
 })
 
-flask_app = Flask(__name__)
-
-dash_app = dash.Dash(__name__, server=flask_app, requests_pathname_prefix="/dash/")
-
-dash_app.layout = html.Div([
+app = dash.Dash(__name__)
+app.layout = html.Div([
     html.H1("Kiarostami Short Film Festival", style={'textAlign': 'center', 'color': 'white'}),  
 
     html.Div([
@@ -57,26 +51,9 @@ dash_app.layout = html.Div([
     html.Div([
         html.H2("Age Distribution", style={'color': 'white'}),
         dcc.Graph(id='age-histogram', figure=px.histogram(df, x="Age", title="Age Distribution", template="plotly_dark"))
-    ]),
-
-    html.Div([
-        html.H2("Films Inspired by Kiarostami", style={'color': 'white'}),
-        dcc.Graph(id="bar-chart"),
-        dcc.RangeSlider(
-            id='year-slider',
-            min=int(df3["Production Year"].min()),
-            max=int(df3["Production Year"].max()),
-            value=[int(df3["Production Year"].min()), int(df3["Production Year"].max())],
-            marks={int(year): str(year) for year in sorted(df3["Production Year"].unique())},
-            step=1
-        )
     ])
 ], style={'backgroundColor': 'black', 'color': 'white'})
 
-@flask_app.route("/dash/")
-def render_dashboard():
-    return _generate_limited_dispatch_by_url(dash_app, "/dash/")
+dash_app_html = app.index()
 
-st.components.v1.html(f"""
-    <iframe src="/dash/" width="100%" height="800px"></iframe>
-""", height=800)
+st.components.v1.html(dash_app_html, height=1000)
