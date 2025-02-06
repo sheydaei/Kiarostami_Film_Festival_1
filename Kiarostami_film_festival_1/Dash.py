@@ -1,25 +1,23 @@
-
 import dash
-from dash import dcc, html, dash_table
+from dash import dcc, html
 from dash.dependencies import Input, Output
 import pandas as pd
 import plotly.express as px
 import streamlit as st
-import os
 import gdown
+from flask import Flask
+from dash.dash import _generate_limited_dispatch_by_url
 
-
+st.set_page_config(page_title="Kiarostami Film Festival Dashboard", layout="wide")
 
 st.title("🎬 Kiarostami Short Film Festival Dashboard")
 
 FILE_ID = "1HDY03kLu4vdjbwnLc261gxKWl__ef_nV"
 url = f"https://drive.google.com/uc?id={FILE_ID}"
-
 csv_path = "Final_Final2.csv"
 gdown.download(url, csv_path, quiet=False)
 
 df = pd.read_csv(csv_path)
-
 df = df.drop(['Unnamed: 0'], axis=1)
 
 df['Age'] = pd.to_numeric(df['Age'], errors='coerce')
@@ -34,9 +32,11 @@ df3['Inspired_By_Kiarostami_clean'] = df3['Inspired_By_Kiarostami_clean'].replac
     'Other ways': 'Loosely Inspired'
 })
 
-app = dash.Dash(__name__)
+flask_app = Flask(__name__)
 
-app.layout = html.Div([
+dash_app = dash.Dash(__name__, server=flask_app, requests_pathname_prefix="/dash/")
+
+dash_app.layout = html.Div([
     html.H1("Kiarostami Short Film Festival", style={'textAlign': 'center', 'color': 'white'}),  
 
     html.Div([
@@ -51,17 +51,12 @@ app.layout = html.Div([
 
     html.Div([
         html.H2("Gender Breakdown", style={'color': 'white'}),
-        dcc.Graph(id='gender-pie-chart')
+        dcc.Graph(id='gender-pie-chart', figure=px.pie(df, names='Gender', title='Gender Breakdown', hole=0.4, template="plotly_dark"))
     ]),
 
     html.Div([
         html.H2("Age Distribution", style={'color': 'white'}),
-        dcc.Graph(id='age-histogram')
-    ]),
-
-    html.Div([
-        html.H2("Countries Represented", style={'color': 'white'}),
-        html.Div(id='country-table')
+        dcc.Graph(id='age-histogram', figure=px.histogram(df, x="Age", title="Age Distribution", template="plotly_dark"))
     ]),
 
     html.Div([
@@ -78,21 +73,10 @@ app.layout = html.Div([
     ])
 ], style={'backgroundColor': 'black', 'color': 'white'})
 
-@app.callback(
-    Output('age-histogram', 'figure'),
-    Input('age-histogram', 'id')
-)
-def update_histogram(_):
-    fig = px.histogram(df, x="Age", title="Age Distribution", template="plotly_dark")
-    return fig
+@flask_app.route("/dash/")
+def render_dashboard():
+    return _generate_limited_dispatch_by_url(dash_app, "/dash/")
 
-@app.callback(
-    Output('gender-pie-chart', 'figure'),
-    Input('gender-pie-chart', 'id')
-)
-def update_pie_chart(_):
-    fig = px.pie(df, names='Gender', title='Gender Breakdown', hole=0.4, template="plotly_dark")
-    return fig
-
-if __name__ == "__main__":
-    app.run_server(debug=True)
+st.components.v1.html(f"""
+    <iframe src="/dash/" width="100%" height="800px"></iframe>
+""", height=800)
