@@ -9,7 +9,7 @@ st.set_page_config(page_title="Kiarostami Film Festival Dashboard", layout="wide
 
 st.title("🎬 Kiarostami Short Film Festival Dashboard")
 
-# 📌 خواندن فایل CSV از GitHub (لینک `raw.githubusercontent.com` رو چک کن)
+# 📌 خواندن فایل CSV از GitHub
 csv_url = "https://raw.githubusercontent.com/sheydaei/My-projects/main/Kiarostami_film_festival_1/Final_Final2.csv"
 df = pd.read_csv(csv_url)
 
@@ -53,10 +53,5 @@ app.layout = html.Div([
 ], style={'backgroundColor': 'black', 'color': 'white'})
 
 # 📌 اجرای Dash در Streamlit
-from flask import Flask
-flask_app = Flask(__name__)
-dash_app = dash.Dash(__name__, server=flask_app, requests_pathname_prefix="/dash/")
-dash_app.layout = app.layout
-
 st.write("🔹 **Loading Dashboard...**")
-st.components.v1.iframe("https://your-streamlit-app-url/dash/", height=800)
+st.components.v1.html(app.index(), height=800)
