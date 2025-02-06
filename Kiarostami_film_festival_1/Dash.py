@@ -10,7 +10,7 @@ st.set_page_config(page_title="Kiarostami Film Festival Dashboard", layout="wide
 st.title("🎬 Kiarostami Short Film Festival Dashboard")
 
 FILE_ID = "1HDY03kLu4vdjbwnLc261gxKWl__ef_nV"
-url = f"https://drive.google.com/uc?id={FILE_ID}"
+url = f"https://drive.google.com/uc?export=download&id={FILE_ID}"
 csv_path = "Final_Final2.csv"
 gdown.download(url, csv_path, quiet=False)
 
