@@ -11,9 +11,6 @@ st.title("🎬 Kiarostami Short Film Festival Dashboard")
 csv_url = "https://raw.githubusercontent.com/sheydaei/My-projects/refs/heads/main/Kiarostami_film_festival_1/Final_Final2.csv"
 df = pd.read_csv(csv_url)
 
-df = pd.read_csv(csv_path)
-df = df.drop(['Unnamed: 0'], axis=1)
-
 df['Age'] = pd.to_numeric(df['Age'], errors='coerce')
 df['Gender'] = df['Gender'].replace({
     'male': 'Male',           
