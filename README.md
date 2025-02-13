@@ -18,7 +18,7 @@ This project is an interactive dashboard that visualizes and analyzes data from 
 6. **Number of Countries**: A count of participating countries, with a table showing country-specific data.
    ![Number_of_countries](Screenshot%202025-02-13%20at%2023.34.26.png)
    **Countries and Number of Movies:**
-   ![Countries Represented](Screenshot%2025-02-13%20at%23.34.45.png)
+   ![Countries Represented](Screenshot%2025-02-13%20at%2023.34.45.png)
 8. **Genre and Rejection Status**: A bar chart of movies categorized by genre and acceptance/rejection status.
    ![Genre and Rejection Status](newplot%20(12).png)
 9. **Film Duration**: A histogram showing the distribution of film durations.
